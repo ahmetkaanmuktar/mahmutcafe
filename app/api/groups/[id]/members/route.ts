@@ -37,15 +37,30 @@ export async function POST(
     return NextResponse.json({ error: "Zaten grupta" }, { status: 409 });
   }
 
-  group.memberIds.push(userId);
+  // Check if invitation already exists
+  const existingInv = db.invitations.find(
+    (inv) => inv.groupId === id && inv.inviteeId === userId && inv.status === "pending"
+  );
+  if (existingInv) {
+    return NextResponse.json({ error: "Davet zaten gönderildi" }, { status: 409 });
+  }
+
+  const { v4 as uuidv4 } = await import("uuid");
+
+  db.invitations.push({
+    id: uuidv4(),
+    groupId: id,
+    groupName: group.name,
+    inviterId: auth.userId,
+    inviterUsername: auth.username,
+    inviteeId: userId,
+    status: "pending",
+    createdAt: new Date().toISOString(),
+  });
+
   await writeDb(db);
 
-  const members = group.memberIds
-    .map((mid) => db.users.find((u) => u.id === mid))
-    .filter(Boolean)
-    .map((u) => ({ id: u!.id, username: u!.username }));
-
-  return NextResponse.json({ members });
+  return NextResponse.json({ message: "Davet gönderildi", success: true });
 }
 
 export async function DELETE(

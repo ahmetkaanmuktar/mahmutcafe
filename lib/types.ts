@@ -28,10 +28,22 @@ export interface Transaction {
   createdAt: string;
 }
 
+export interface Invitation {
+  id: string;
+  groupId: string;
+  groupName: string;
+  inviterId: string;
+  inviterUsername: string;
+  inviteeId: string;
+  status: "pending" | "accepted" | "rejected";
+  createdAt: string;
+}
+
 export interface Database {
   users: User[];
   groups: Group[];
   transactions: Transaction[];
+  invitations: Invitation[];
 }
 
 export type AccountType = "personal" | "group";

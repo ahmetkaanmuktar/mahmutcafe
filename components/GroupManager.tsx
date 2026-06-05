@@ -27,6 +27,7 @@ export default function GroupManager({
   selectedGroupId,
 }: GroupManagerProps) {
   const [groups, setGroups] = useState<Group[]>([]);
+  const [invitations, setInvitations] = useState<any[]>([]);
   const [showCreate, setShowCreate] = useState(false);
   const [showAddMember, setShowAddMember] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
@@ -47,9 +48,19 @@ export default function GroupManager({
     }
   }, [selectedGroupId, onGroupChange]);
 
+  const loadInvitations = useCallback(async () => {
+    try {
+      const data = await apiFetch<{ invitations: any[] }>("/api/invitations");
+      setInvitations(data.invitations);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
   useEffect(() => {
     loadGroups();
-  }, [loadGroups]);
+    loadInvitations();
+  }, [loadGroups, loadInvitations]);
 
   const createGroup = async () => {
     if (!newGroupName.trim()) return;
@@ -91,15 +102,19 @@ export default function GroupManager({
     if (!selectedGroupId) return;
     setLoading(true);
     try {
-      const data = await apiFetch<{ members: Member[] }>(
+      const data = await apiFetch<{ message?: string; members?: Member[] }>(
         `/api/groups/${selectedGroupId}/members`,
         { method: "POST", body: JSON.stringify({ userId }) }
       );
-      setGroups((prev) =>
-        prev.map((g) =>
-          g.id === selectedGroupId ? { ...g, members: data.members } : g
-        )
-      );
+      if (data.members) {
+        setGroups((prev) =>
+          prev.map((g) =>
+            g.id === selectedGroupId ? { ...g, members: data.members! } : g
+          )
+        );
+      } else if (data.message) {
+        alert(data.message); // e.g. "Davet gönderildi"
+      }
       setSearchQuery("");
       setSearchResults([]);
       setShowAddMember(false);
@@ -110,9 +125,45 @@ export default function GroupManager({
     }
   };
 
+  const handleInvitation = async (invId: string, action: "accept" | "reject") => {
+    try {
+      await apiFetch(`/api/invitations/${invId}`, {
+        method: "POST",
+        body: JSON.stringify({ action }),
+      });
+      setInvitations((prev) => prev.filter((i) => i.id !== invId));
+      if (action === "accept") {
+        loadGroups();
+      }
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "İşlem başarısız");
+    }
+  };
+
   const selectedGroup = groups.find((g) => g.id === selectedGroupId);
 
   return (
+    <div className="space-y-4">
+      {invitations.length > 0 && (
+        <div className="card border-cafe-accent bg-cafe-surface">
+          <h3 className="font-semibold text-cafe-accent mb-2">Gelen Davetler</h3>
+          <ul className="space-y-2">
+            {invitations.map((inv) => (
+              <li key={inv.id} className="flex justify-between items-center bg-cafe-card p-3 rounded-xl border border-cafe-border">
+                <div className="text-sm">
+                  <span className="font-medium text-cafe-text">@{inv.inviterUsername}</span> sizi
+                  <span className="font-bold text-cafe-accent"> {inv.groupName} </span> grubuna davet ediyor.
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => handleInvitation(inv.id, "accept")} className="text-xs bg-cafe-accent text-cafe-bg px-3 py-1.5 rounded-lg font-bold">Kabul</button>
+                  <button onClick={() => handleInvitation(inv.id, "reject")} className="text-xs bg-cafe-border text-cafe-textMuted px-3 py-1.5 rounded-lg font-medium">Reddet</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
     <div className="card">
       <div className="flex justify-between items-center mb-3">
         <h2 className="font-semibold text-cafe-text">Gruplar</h2>
@@ -234,6 +285,7 @@ export default function GroupManager({
       )}
 
       {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
+    </div>
     </div>
   );
 }

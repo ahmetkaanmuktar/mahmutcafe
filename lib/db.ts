@@ -8,7 +8,7 @@ const DATA_DIR = IS_PROD ? "/tmp/data" : path.join(process.cwd(), "data");
 const DB_PATH = path.join(DATA_DIR, "db.json");
 const GCS_DB_FILE = "db.json";
 
-const EMPTY_DB: Database = { users: [], groups: [], transactions: [] };
+const EMPTY_DB: Database = { users: [], groups: [], transactions: [], invitations: [] };
 
 function ensureLocalDb(): void {
   if (!fs.existsSync(DATA_DIR)) {
@@ -40,10 +40,16 @@ async function writeToGcs(db: Database, bucket: string): Promise<void> {
 
 export async function readDb(): Promise<Database> {
   const bucket = process.env.GCS_BUCKET;
-  if (bucket) return readFromGcs(bucket);
-  ensureLocalDb();
-  const raw = fs.readFileSync(DB_PATH, "utf-8");
-  return JSON.parse(raw) as Database;
+  let db: Database;
+  if (bucket) {
+    db = await readFromGcs(bucket);
+  } else {
+    ensureLocalDb();
+    const raw = fs.readFileSync(DB_PATH, "utf-8");
+    db = JSON.parse(raw) as Database;
+  }
+  if (!db.invitations) db.invitations = [];
+  return db;
 }
 
 export async function writeDb(db: Database): Promise<void> {
