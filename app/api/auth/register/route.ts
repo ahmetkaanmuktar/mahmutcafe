@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
-import { v4 as uuidv4 } from "uuid";
 import { readDb, writeDb } from "@/lib/db";
 import { createToken, TOKEN_MAX_AGE } from "@/lib/auth";
 
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     }
 
     const user = {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       username: trimmed,
       passwordHash: await bcrypt.hash(password, 10),
       createdAt: new Date().toISOString(),
@@ -50,12 +50,8 @@ export async function POST(req: NextRequest) {
 
     const token = await createToken({ userId: user.id, username: user.username });
 
-    const res = NextResponse.json({
-      token,
-      user: { id: user.id, username: user.username },
-    });
-
-    res.cookies.set("mahmud_token", token, {
+    const cookieStore = await cookies();
+    cookieStore.set("mahmud_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
@@ -63,7 +59,10 @@ export async function POST(req: NextRequest) {
       path: "/",
     });
 
-    return res;
+    return NextResponse.json({
+      token,
+      user: { id: user.id, username: user.username },
+    });
   } catch (error) {
     console.error("Register Error:", error);
     return NextResponse.json({ error: "Kayıt başarısız", details: error instanceof Error ? error.message : String(error) }, { status: 500 });
