@@ -89,10 +89,10 @@ export default function TransactionList({
                   <button
                     type="button"
                     onClick={() => handleDelete(tx.id)}
-                    className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-600 text-sm transition-opacity"
+                    className="text-red-400 hover:text-red-600 p-2 -mr-2 rounded-full hover:bg-red-50 transition-colors"
                     title="Sil"
                   >
-                    ✕
+                    🗑️
                   </button>
                 )}
               </div>

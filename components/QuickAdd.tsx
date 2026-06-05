@@ -64,7 +64,13 @@ export default function QuickAdd({ accountType, groupId, onAdded }: QuickAddProp
           >
             −
           </button>
-          <span className="w-8 text-center font-semibold">{quantity}</span>
+          <input
+            type="number"
+            value={quantity}
+            onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+            className="w-16 text-center font-semibold border border-cafe-200 rounded-md py-1 focus:outline-none focus:ring-2 focus:ring-cafe-400"
+            min="1"
+          />
           <button
             type="button"
             onClick={() => setQuantity(quantity + 1)}
