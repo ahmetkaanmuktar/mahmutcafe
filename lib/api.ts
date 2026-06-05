@@ -30,7 +30,8 @@ export async function apiFetch<T>(
   const data = await res.json();
 
   if (!res.ok) {
-    throw new Error(data.error || "Bir hata oluştu");
+    const errorMsg = data.details ? `${data.error} - Detay: ${data.details}` : (data.error || "Bir hata oluştu");
+    throw new Error(errorMsg);
   }
 
   return data as T;
