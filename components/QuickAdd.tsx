@@ -68,7 +68,7 @@ export default function QuickAdd({ accountType, groupId, onAdded }: QuickAddProp
             type="number"
             value={quantity}
             onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-            className="w-16 text-center font-semibold border border-cafe-border rounded-md py-1 focus:outline-none focus:ring-2 focus:ring-cafe-400"
+            className="w-16 text-center font-semibold border border-cafe-border rounded-md py-1 focus:outline-none focus:ring-2 focus:ring-cafe-accent bg-cafe-surface text-cafe-text"
             min="1"
           />
           <button
@@ -115,7 +115,7 @@ export default function QuickAdd({ accountType, groupId, onAdded }: QuickAddProp
               onChange={(e) => setCustomPrice(e.target.value)}
               placeholder="Fiyat (TL)"
               min="1"
-              className="flex-1 px-3 py-2 rounded-lg border border-cafe-border focus:outline-none focus:ring-2 focus:ring-cafe-400"
+              className="flex-1 px-3 py-2 rounded-lg border border-cafe-border bg-cafe-surface text-cafe-text placeholder-cafe-textMuted focus:outline-none focus:ring-2 focus:ring-cafe-accent"
             />
             <button
               type="button"

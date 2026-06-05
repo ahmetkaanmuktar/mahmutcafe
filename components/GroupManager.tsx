@@ -227,13 +227,13 @@ export default function GroupManager({
 
           {showAddMember && (
             <div className="mt-3">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => searchUsers(e.target.value)}
-                placeholder="Kullanıcı adı ara..."
-                className="w-full px-3 py-2 rounded-lg border border-cafe-border focus:outline-none focus:ring-2 focus:ring-cafe-400 text-sm"
-              />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => searchUsers(e.target.value)}
+                  placeholder="Kullanıcı adı ara..."
+                  className="w-full px-3 py-2 rounded-lg border border-cafe-border bg-cafe-surface text-cafe-text placeholder-cafe-textMuted focus:outline-none focus:ring-2 focus:ring-cafe-accent text-sm"
+                />
               {searchResults.length > 0 && (
                 <ul className="mt-1 border border-cafe-border rounded-lg overflow-hidden">
                   {searchResults.map((u) => (
@@ -262,7 +262,7 @@ export default function GroupManager({
             value={newGroupName}
             onChange={(e) => setNewGroupName(e.target.value)}
             placeholder="Grup adı (ör: Mahmud Ekibi)"
-            className="w-full px-3 py-2 rounded-lg border border-cafe-border focus:outline-none focus:ring-2 focus:ring-cafe-400 text-sm mb-2"
+            className="w-full px-3 py-2 rounded-lg border border-cafe-border bg-cafe-surface text-cafe-text placeholder-cafe-textMuted focus:outline-none focus:ring-2 focus:ring-cafe-accent text-sm mb-2"
           />
           <div className="flex gap-2">
             <button

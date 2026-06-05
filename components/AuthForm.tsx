@@ -46,7 +46,7 @@ export default function AuthForm() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-cafe-border focus:outline-none focus:ring-2 focus:ring-cafe-400"
+              className="w-full px-4 py-2.5 rounded-xl border border-cafe-border bg-cafe-surface text-cafe-text placeholder-cafe-textMuted focus:outline-none focus:ring-2 focus:ring-cafe-accent"
               placeholder="kullaniciadi"
               autoComplete="username"
               required
@@ -61,7 +61,7 @@ export default function AuthForm() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-cafe-border focus:outline-none focus:ring-2 focus:ring-cafe-400"
+              className="w-full px-4 py-2.5 rounded-xl border border-cafe-border bg-cafe-surface text-cafe-text placeholder-cafe-textMuted focus:outline-none focus:ring-2 focus:ring-cafe-accent"
               placeholder="••••••"
               autoComplete={mode === "login" ? "current-password" : "new-password"}
               required
