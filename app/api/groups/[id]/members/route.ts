@@ -45,7 +45,8 @@ export async function POST(
     return NextResponse.json({ error: "Davet zaten gönderildi" }, { status: 409 });
   }
 
-  const { v4 as uuidv4 } = await import("uuid");
+  const uuidModule = await import("uuid");
+  const uuidv4 = uuidModule.v4;
 
   db.invitations.push({
     id: uuidv4(),

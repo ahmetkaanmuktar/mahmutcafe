@@ -15,6 +15,7 @@ interface Transaction {
   quantity: number;
   unitPrice: number;
   totalPrice: number;
+  groupId: string | null;
   createdAt: string;
 }
 
