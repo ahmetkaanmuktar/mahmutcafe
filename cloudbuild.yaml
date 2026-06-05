@@ -1,0 +1,32 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/mahmud-cafe/app:${SHORT_SHA}
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/mahmud-cafe/app:${SHORT_SHA}
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - mahmud-cafe
+      - --image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/mahmud-cafe/app:${SHORT_SHA}
+      - --region=${_REGION}
+      - --platform=managed
+      - --allow-unauthenticated
+      - --set-env-vars=GCS_BUCKET=${_GCS_BUCKET},JWT_SECRET=${_JWT_SECRET}
+
+substitutions:
+  _REGION: europe-west1
+  _GCS_BUCKET: mahmud-cafe-data
+  _JWT_SECRET: change-me-in-production
+
+images:
+  - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/mahmud-cafe/app:${SHORT_SHA}
