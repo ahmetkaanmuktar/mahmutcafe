@@ -2,9 +2,10 @@ import fs from "fs";
 import path from "path";
 import type { Database } from "./types";
 
-const DATA_DIR = path.join(process.cwd(), "data");
+// Use /tmp on production if not GCS, otherwise local directory
+const IS_PROD = process.env.NODE_ENV === "production";
+const DATA_DIR = IS_PROD ? "/tmp/data" : path.join(process.cwd(), "data");
 const DB_PATH = path.join(DATA_DIR, "db.json");
-const GCS_BUCKET = process.env.GCS_BUCKET;
 const GCS_DB_FILE = "db.json";
 
 const EMPTY_DB: Database = { users: [], groups: [], transactions: [] };
@@ -18,35 +19,37 @@ function ensureLocalDb(): void {
   }
 }
 
-async function readFromGcs(): Promise<Database> {
+async function readFromGcs(bucket: string): Promise<Database> {
   const { Storage } = await import("@google-cloud/storage");
   const storage = new Storage();
-  const file = storage.bucket(GCS_BUCKET!).file(GCS_DB_FILE);
+  const file = storage.bucket(bucket).file(GCS_DB_FILE);
   const [exists] = await file.exists();
   if (!exists) return { ...EMPTY_DB };
   const [contents] = await file.download();
   return JSON.parse(contents.toString("utf-8")) as Database;
 }
 
-async function writeToGcs(db: Database): Promise<void> {
+async function writeToGcs(db: Database, bucket: string): Promise<void> {
   const { Storage } = await import("@google-cloud/storage");
   const storage = new Storage();
-  const file = storage.bucket(GCS_BUCKET!).file(GCS_DB_FILE);
+  const file = storage.bucket(bucket).file(GCS_DB_FILE);
   await file.save(JSON.stringify(db, null, 2), {
     contentType: "application/json",
   });
 }
 
 export async function readDb(): Promise<Database> {
-  if (GCS_BUCKET) return readFromGcs();
+  const bucket = process.env.GCS_BUCKET;
+  if (bucket) return readFromGcs(bucket);
   ensureLocalDb();
   const raw = fs.readFileSync(DB_PATH, "utf-8");
   return JSON.parse(raw) as Database;
 }
 
 export async function writeDb(db: Database): Promise<void> {
-  if (GCS_BUCKET) {
-    await writeToGcs(db);
+  const bucket = process.env.GCS_BUCKET;
+  if (bucket) {
+    await writeToGcs(db, bucket);
     return;
   }
   ensureLocalDb();
