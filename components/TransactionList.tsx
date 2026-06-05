@@ -9,6 +9,7 @@ interface Transaction {
   quantity: number;
   unitPrice: number;
   totalPrice: number;
+  groupId: string | null;
   createdAt: string;
 }
 
@@ -58,7 +59,34 @@ export default function TransactionList({
     <div className="card">
       <div className="flex justify-between items-center mb-3">
         <h2 className="font-semibold text-cafe-800">Hesap</h2>
-        <span className="text-lg font-bold text-cafe-700">{total} TL</span>
+        <div className="flex items-center gap-3">
+          <span className="text-lg font-bold text-cafe-700">{total} TL</span>
+          {transactions.length > 0 && (
+            <button
+              onClick={async () => {
+                if (confirm("Tüm hesabı sıfırlamak (ödemek) istediğinize emin misiniz? Bu işlem geri alınamaz.")) {
+                  try {
+                    const firstTx = transactions[0];
+                    await apiFetch("/api/transactions/clear", {
+                      method: "POST",
+                      body: JSON.stringify({
+                        groupId: firstTx.groupId,
+                        personal: firstTx.groupId === null,
+                      }),
+                    });
+                    // Reload the page to reset state (or we could pass an onClear callback)
+                    window.location.reload();
+                  } catch (err) {
+                    alert(err instanceof Error ? err.message : "Hesap sıfırlanamadı");
+                  }
+                }
+              }}
+              className="text-xs bg-red-100 text-red-600 hover:bg-red-200 px-3 py-1.5 rounded-lg font-semibold transition-colors"
+            >
+              Hesabı Sıfırla
+            </button>
+          )}
+        </div>
       </div>
 
       {transactions.length === 0 ? (
