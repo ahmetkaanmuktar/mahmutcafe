@@ -59,7 +59,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen pb-20">
-      <header className="bg-cafe-700 text-white px-4 py-4 sticky top-0 z-10 shadow-md">
+      <header className="bg-cafe-accent text-white px-4 py-4 sticky top-0 z-10 shadow-md">
         <div className="max-w-lg mx-auto flex justify-between items-center">
           <div>
             <h1 className="text-lg font-bold">☕ Mahmud Cafe</h1>
@@ -79,15 +79,15 @@ export default function Dashboard() {
         {activeTab === "home" && (
           <>
             <div className="card">
-              <p className="text-sm text-cafe-600 mb-2">Hesaba yaz:</p>
+              <p className="text-sm text-cafe-text mb-2">Hesaba yaz:</p>
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={() => setAccountType("group")}
                   className={`flex-1 py-2.5 rounded-xl font-medium transition-colors ${
                     accountType === "group"
-                      ? "bg-cafe-600 text-white"
-                      : "bg-cafe-100 text-cafe-700"
+                      ? "bg-cafe-accent text-white"
+                      : "bg-cafe-border text-cafe-text"
                   }`}
                 >
                   👥 Grup Hesabı
@@ -97,8 +97,8 @@ export default function Dashboard() {
                   onClick={() => setAccountType("personal")}
                   className={`flex-1 py-2.5 rounded-xl font-medium transition-colors ${
                     accountType === "personal"
-                      ? "bg-cafe-600 text-white"
-                      : "bg-cafe-100 text-cafe-700"
+                      ? "bg-cafe-accent text-white"
+                      : "bg-cafe-border text-cafe-text"
                   }`}
                 >
                   👤 Kendi Hesabım
@@ -134,15 +134,15 @@ export default function Dashboard() {
         )}
       </main>
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-cafe-100 shadow-lg">
+      <nav className="fixed bottom-0 left-0 right-0 bg-cafe-card border-t border-cafe-border shadow-lg">
         <div className="max-w-lg mx-auto flex">
           <button
             type="button"
             onClick={() => setActiveTab("home")}
             className={`flex-1 py-3 text-center text-sm font-medium transition-colors ${
               activeTab === "home"
-                ? "text-cafe-700 border-t-2 border-cafe-600"
-                : "text-cafe-400"
+                ? "text-cafe-text border-t-2 border-cafe-600"
+                : "text-cafe-textMuted"
             }`}
           >
             🏠 Ana Sayfa
@@ -152,8 +152,8 @@ export default function Dashboard() {
             onClick={() => setActiveTab("groups")}
             className={`flex-1 py-3 text-center text-sm font-medium transition-colors ${
               activeTab === "groups"
-                ? "text-cafe-700 border-t-2 border-cafe-600"
-                : "text-cafe-400"
+                ? "text-cafe-text border-t-2 border-cafe-600"
+                : "text-cafe-textMuted"
             }`}
           >
             👥 Gruplar

@@ -10,7 +10,7 @@ function AppContent() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-cafe-500 text-lg">☕ Yükleniyor...</div>
+        <div className="text-cafe-textMuted text-lg">☕ Yükleniyor...</div>
       </div>
     );
   }

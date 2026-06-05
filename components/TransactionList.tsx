@@ -58,9 +58,9 @@ export default function TransactionList({
   return (
     <div className="card">
       <div className="flex justify-between items-center mb-3">
-        <h2 className="font-semibold text-cafe-800">Hesap</h2>
+        <h2 className="font-semibold text-cafe-text">Hesap</h2>
         <div className="flex items-center gap-3">
-          <span className="text-lg font-bold text-cafe-700">{total} TL</span>
+          <span className="text-lg font-bold text-cafe-text">{total} TL</span>
           {transactions.length > 0 && (
             <button
               onClick={async () => {
@@ -90,7 +90,7 @@ export default function TransactionList({
       </div>
 
       {transactions.length === 0 ? (
-        <p className="text-cafe-400 text-sm text-center py-6">
+        <p className="text-cafe-textMuted text-sm text-center py-6">
           Henüz kayıt yok. Bir şeyler ekle! ☕
         </p>
       ) : (
@@ -98,21 +98,21 @@ export default function TransactionList({
           {transactions.map((tx) => (
             <li
               key={tx.id}
-              className="flex items-center justify-between p-3 rounded-xl bg-cafe-50 group"
+              className="flex items-center justify-between p-3 rounded-xl bg-cafe-surface group"
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-cafe-800">
+                  <span className="font-medium text-cafe-text">
                     {tx.quantity}x {tx.itemName}
                   </span>
-                  <span className="text-cafe-500 text-sm">@{tx.username}</span>
+                  <span className="text-cafe-textMuted text-sm">@{tx.username}</span>
                 </div>
-                <p className="text-xs text-cafe-400 mt-0.5">
+                <p className="text-xs text-cafe-textMuted mt-0.5">
                   {formatDate(tx.createdAt)}
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-cafe-700">{tx.totalPrice} TL</span>
+                <span className="font-semibold text-cafe-text">{tx.totalPrice} TL</span>
                 {onDelete && tx.username === currentUsername && (
                   <button
                     type="button"

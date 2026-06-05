@@ -3,17 +3,21 @@
 @tailwind utilities;
 
 body {
-  @apply bg-cafe-50 text-cafe-900 antialiased;
+  @apply bg-radial-cafe text-cafe-text antialiased min-h-screen selection:bg-cafe-accent selection:text-cafe-bg;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-heading tracking-tight;
 }
 
 @layer utilities {
   .btn-primary {
-    @apply bg-cafe-600 hover:bg-cafe-700 text-white font-medium rounded-xl px-4 py-2.5 transition-colors active:scale-[0.98];
+    @apply bg-cafe-accent hover:bg-cafe-accentHover text-cafe-bg font-bold rounded-2xl px-4 py-3 transition-colors shadow-md active:scale-[0.98];
   }
   .btn-secondary {
-    @apply bg-cafe-100 hover:bg-cafe-200 text-cafe-800 font-medium rounded-xl px-4 py-2.5 transition-colors active:scale-[0.98];
+    @apply bg-cafe-surface hover:bg-cafe-card text-cafe-text font-medium border border-cafe-border rounded-2xl px-4 py-3 transition-colors active:scale-[0.98];
   }
   .card {
-    @apply bg-white rounded-2xl shadow-sm border border-cafe-100 p-4;
+    @apply bg-cafe-card rounded-[16px] shadow-lg border border-cafe-border p-5;
   }
 }

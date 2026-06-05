@@ -115,18 +115,18 @@ export default function GroupManager({
   return (
     <div className="card">
       <div className="flex justify-between items-center mb-3">
-        <h2 className="font-semibold text-cafe-800">Gruplar</h2>
+        <h2 className="font-semibold text-cafe-text">Gruplar</h2>
         <button
           type="button"
           onClick={() => setShowCreate(true)}
-          className="text-sm text-cafe-600 hover:text-cafe-800 font-medium"
+          className="text-sm text-cafe-text hover:text-cafe-text font-medium"
         >
           + Yeni Grup
         </button>
       </div>
 
       {groups.length === 0 ? (
-        <p className="text-cafe-400 text-sm text-center py-4">
+        <p className="text-cafe-textMuted text-sm text-center py-4">
           Henüz grup yok. Arkadaşlarınla bir grup oluştur!
         </p>
       ) : (
@@ -138,8 +138,8 @@ export default function GroupManager({
               onClick={() => onGroupChange(g.id)}
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
                 selectedGroupId === g.id
-                  ? "bg-cafe-600 text-white"
-                  : "bg-cafe-100 text-cafe-700 hover:bg-cafe-200"
+                  ? "bg-cafe-accent text-white"
+                  : "bg-cafe-border text-cafe-text hover:bg-cafe-200"
               }`}
             >
               {g.name} ({g.totalDebt} TL)
@@ -149,15 +149,15 @@ export default function GroupManager({
       )}
 
       {selectedGroup && (
-        <div className="border-t border-cafe-100 pt-3">
+        <div className="border-t border-cafe-border pt-3">
           <div className="flex justify-between items-center mb-2">
-            <p className="text-sm text-cafe-600">
+            <p className="text-sm text-cafe-text">
               {selectedGroup.members.length} üye
             </p>
             <button
               type="button"
               onClick={() => setShowAddMember(!showAddMember)}
-              className="text-sm text-cafe-600 hover:text-cafe-800"
+              className="text-sm text-cafe-text hover:text-cafe-text"
             >
               + Arkadaş Ekle
             </button>
@@ -167,7 +167,7 @@ export default function GroupManager({
             {selectedGroup.members.map((m) => (
               <span
                 key={m.id}
-                className="px-2 py-1 rounded-lg bg-cafe-50 text-cafe-700 text-xs"
+                className="px-2 py-1 rounded-lg bg-cafe-surface text-cafe-text text-xs"
               >
                 @{m.username}
               </span>
@@ -181,17 +181,17 @@ export default function GroupManager({
                 value={searchQuery}
                 onChange={(e) => searchUsers(e.target.value)}
                 placeholder="Kullanıcı adı ara..."
-                className="w-full px-3 py-2 rounded-lg border border-cafe-200 focus:outline-none focus:ring-2 focus:ring-cafe-400 text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-cafe-border focus:outline-none focus:ring-2 focus:ring-cafe-400 text-sm"
               />
               {searchResults.length > 0 && (
-                <ul className="mt-1 border border-cafe-100 rounded-lg overflow-hidden">
+                <ul className="mt-1 border border-cafe-border rounded-lg overflow-hidden">
                   {searchResults.map((u) => (
                     <li key={u.id}>
                       <button
                         type="button"
                         disabled={loading}
                         onClick={() => addMember(u.id)}
-                        className="w-full text-left px-3 py-2 text-sm hover:bg-cafe-50 disabled:opacity-50"
+                        className="w-full text-left px-3 py-2 text-sm hover:bg-cafe-surface disabled:opacity-50"
                       >
                         @{u.username}
                       </button>
@@ -205,13 +205,13 @@ export default function GroupManager({
       )}
 
       {showCreate && (
-        <div className="mt-3 p-3 rounded-xl bg-cafe-50 border border-cafe-100">
+        <div className="mt-3 p-3 rounded-xl bg-cafe-surface border border-cafe-border">
           <input
             type="text"
             value={newGroupName}
             onChange={(e) => setNewGroupName(e.target.value)}
             placeholder="Grup adı (ör: Mahmud Ekibi)"
-            className="w-full px-3 py-2 rounded-lg border border-cafe-200 focus:outline-none focus:ring-2 focus:ring-cafe-400 text-sm mb-2"
+            className="w-full px-3 py-2 rounded-lg border border-cafe-border focus:outline-none focus:ring-2 focus:ring-cafe-400 text-sm mb-2"
           />
           <div className="flex gap-2">
             <button
